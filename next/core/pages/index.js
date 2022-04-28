@@ -32,8 +32,6 @@ const useStyles = makeStyles((theme) => ({
 function Home({ categories, data }) {
 	const classes = useStyles();
 
-	console.log(data);
-
 	return (
 		<>
 			<Header data={categories} />
@@ -41,12 +39,7 @@ function Home({ categories, data }) {
 				<Container className={classes.cardGrid} maxWidth="lg">
 					<Grid container spacing={2}>
 						{data.map((post) => (
-							<Link
-								key={post.id}
-								href={`product/${new URLSearchParams(
-									post.slug
-								)}`}
-							>
+							<Link key={post.id} href={`product/${post.slug}`}>
 								<Grid item xs={6} sm={4} md={3}>
 									<Card
 										className={classes.card}

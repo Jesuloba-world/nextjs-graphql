@@ -27,5 +27,13 @@ class Query(graphene.ObjectType):
 
     all_Products = graphene.List(ProductType)
 
+    product_by_name = graphene.Field(ProductType, slug=graphene.String(required=True))
+
     def resolve_all_Products(root, info):
         return Product.objects.all()
+
+    def resolve_product_by_name(root, info, slug):
+        try:
+            return Product.objects.get(slug=slug)
+        except Product.DoesNotExist:
+            return None
