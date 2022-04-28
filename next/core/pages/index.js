@@ -29,7 +29,7 @@ const useStyles = makeStyles((theme) => ({
 	},
 }));
 
-function Home({ posts, categories, data }) {
+function Home({ categories, data }) {
 	const classes = useStyles();
 
 	console.log(data);
@@ -40,10 +40,10 @@ function Home({ posts, categories, data }) {
 			<main>
 				<Container className={classes.cardGrid} maxWidth="lg">
 					<Grid container spacing={2}>
-						{posts.map((post) => (
+						{data.map((post) => (
 							<Link
 								key={post.id}
-								href={`product/${encodeURIComponent(
+								href={`product/${new URLSearchParams(
 									post.slug
 								)}`}
 							>
@@ -54,9 +54,9 @@ function Home({ posts, categories, data }) {
 									>
 										<CardMedia
 											className={classes.cardMedia}
-											image={post.product_image[0].image}
+											image={post.productImage[0].image}
 											title="Image title"
-											alt={post.product_image[0].alt_text}
+											alt={post.productImage[0].altText}
 										/>
 										<CardContent>
 											<Typography
@@ -70,7 +70,7 @@ function Home({ posts, categories, data }) {
 												fontSize={16}
 												fontWeight={900}
 											>
-												£{post.regular_price}
+												£{post.regularPrice}
 											</Box>
 										</CardContent>
 									</Card>
@@ -85,9 +85,6 @@ function Home({ posts, categories, data }) {
 }
 
 export async function getStaticProps() {
-	const res = await fetch("http://127.0.0.1:8000/api/");
-	const posts = await res.json();
-
 	const ress = await fetch("http://127.0.0.1:8000/api/category/");
 	const categories = await ress.json();
 
@@ -95,10 +92,15 @@ export async function getStaticProps() {
 		query: gql`
 			query {
 				allProducts {
+					id
 					title
 					description
 					regularPrice
 					slug
+					productImage {
+						image
+						altText
+					}
 				}
 			}
 		`,
@@ -107,7 +109,6 @@ export async function getStaticProps() {
 	return {
 		props: {
 			data: data.data.allProducts,
-			posts,
 			categories,
 		},
 	};
