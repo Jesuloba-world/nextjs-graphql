@@ -139,8 +139,17 @@ export async function getStaticPaths() {
 }
 
 export async function getStaticProps({ params }) {
-	const ress = await fetch("http://127.0.0.1:8000/api/category/");
-	const categories = await ress.json();
+	const categories = await client.query({
+		query: gql`
+			query Categories {
+				allCategories {
+					id
+					name
+					slug
+				}
+			}
+		`,
+	});
 
 	const PRODUCT_DATA = gql`
 		query ($slug: String!) {
@@ -167,7 +176,7 @@ export async function getStaticProps({ params }) {
 	return {
 		props: {
 			data: data.productByName,
-			categories,
+			categories: categories.data.allCategories,
 		},
 	};
 }
