@@ -27,7 +27,6 @@ INSTALLED_APPS = [
     "django.contrib.staticfiles",
     "store",
     "mptt",
-    "rest_framework",
     "graphene_django",
 ]
 
