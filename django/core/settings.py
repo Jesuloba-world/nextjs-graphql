@@ -26,6 +26,7 @@ INSTALLED_APPS = [
     "django.contrib.messages",
     "django.contrib.staticfiles",
     "store",
+    "account",
     "mptt",
     "graphene_django",
 ]
@@ -112,8 +113,6 @@ STATIC_URL = "/static/"
 
 MEDIA_URL = "/media/"
 MEDIA_ROOT = BASE_DIR / "media/"
-
-REST_FRAMEWORK = {"DEFAULT_PERMISSION_CLASSES": ["rest_framework.permissions.DjangoModelPermissionsOrAnonReadOnly"]}
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 

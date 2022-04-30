@@ -1,6 +1,5 @@
 import graphene
 from graphene_django import DjangoObjectType
-from typing_extensions import Required
 
 from .models import Category, Product, ProductImage
 

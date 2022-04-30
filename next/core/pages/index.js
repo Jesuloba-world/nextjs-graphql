@@ -9,7 +9,7 @@ import Grid from "@material-ui/core/Grid";
 import Typography from "@material-ui/core/Typography";
 import Container from "@material-ui/core/Container";
 import { gql } from "@apollo/client";
-import client from "./api/apollo-client";
+import client from "../apollo/apollo-client";
 
 const useStyles = makeStyles((theme) => ({
 	example: {

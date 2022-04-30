@@ -8,7 +8,7 @@ import Grid from "@material-ui/core/Grid";
 import Box from "@material-ui/core/Box";
 import Hidden from "@material-ui/core/Hidden";
 import { gql } from "@apollo/client";
-import client from "../api/apollo-client";
+import client from "../../apollo/apollo-client";
 
 const useStyles = makeStyles((theme) => ({
 	root: {
