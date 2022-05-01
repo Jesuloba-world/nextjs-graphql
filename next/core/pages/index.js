@@ -8,8 +8,8 @@ import Link from "next/link";
 import Grid from "@material-ui/core/Grid";
 import Typography from "@material-ui/core/Typography";
 import Container from "@material-ui/core/Container";
-import { gql } from "@apollo/client";
-import client from "../apollo/apollo-client";
+import { allCategoriesQuery, allProductsQuery } from "../apollo/graphql";
+import Client from "../apollo/apollo-client";
 
 const useStyles = makeStyles((theme) => ({
 	example: {
@@ -78,39 +78,21 @@ function Home({ categories, data }) {
 }
 
 export async function getStaticProps() {
+	const client = Client();
+
+	// alCategories
 	const categories = await client.query({
-		query: gql`
-			query Categories {
-				allCategories {
-					id
-					name
-					slug
-				}
-			}
-		`,
+		query: allCategoriesQuery,
 	});
 
-	const data = await client.query({
-		query: gql`
-			query {
-				allProducts {
-					id
-					title
-					description
-					regularPrice
-					slug
-					productImage {
-						image
-						altText
-					}
-				}
-			}
-		`,
+	// allProducts
+	const products = await client.query({
+		query: allProductsQuery,
 	});
 
 	return {
 		props: {
-			data: data.data.allProducts,
+			data: products.data.allProducts,
 			categories: categories.data.allCategories,
 		},
 	};

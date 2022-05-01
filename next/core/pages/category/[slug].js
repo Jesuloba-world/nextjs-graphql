@@ -9,8 +9,8 @@ import Grid from "@material-ui/core/Grid";
 import Typography from "@material-ui/core/Typography";
 import Container from "@material-ui/core/Container";
 import { useRouter } from "next/router";
-import { gql } from "@apollo/client";
-import client from "../../apollo/apollo-client";
+import { allCategoriesQuery, CategoryByNameQuery } from "../../apollo/graphql";
+import Client from "../../apollo/apollo-client";
 
 const useStyles = makeStyles((theme) => ({
 	example: {
@@ -96,41 +96,17 @@ export async function getStaticPaths() {
 }
 
 export async function getStaticProps({ params }) {
+	const client = Client();
+
+	// allCategories
 	const categories = await client.query({
-		query: gql`
-			query Categories {
-				allCategories {
-					id
-					name
-					slug
-				}
-			}
-		`,
+		query: allCategoriesQuery,
 	});
 
-	const ALL_PRODUCT = gql`
-		query ($name: String!) {
-			categoryByName(name: $name) {
-				id
-				name
-				products {
-					id
-					title
-					description
-					regularPrice
-					productImage {
-						id
-						image
-						altText
-					}
-				}
-			}
-		}
-	`;
-
+	// category by name
 	const name = params.slug;
 	const { data } = await client.query({
-		query: ALL_PRODUCT,
+		query: CategoryByNameQuery,
 		variables: { name },
 	});
 

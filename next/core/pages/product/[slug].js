@@ -7,8 +7,12 @@ import Paper from "@material-ui/core/Paper";
 import Grid from "@material-ui/core/Grid";
 import Box from "@material-ui/core/Box";
 import Hidden from "@material-ui/core/Hidden";
-import { gql } from "@apollo/client";
-import client from "../../apollo/apollo-client";
+import {
+	getProductSlugQuery,
+	allCategoriesQuery,
+	productByNameQuery,
+} from "../../apollo/graphql";
+import Client from "../../apollo/apollo-client";
 
 const useStyles = makeStyles((theme) => ({
 	root: {
@@ -118,14 +122,11 @@ function Product({ categories, data }) {
 }
 
 export async function getStaticPaths() {
+	const client = Client();
+
+	// get products slug
 	const { data } = await client.query({
-		query: gql`
-			{
-				allProducts {
-					slug
-				}
-			}
-		`,
+		query: getProductSlugQuery,
 	});
 
 	const paths = data.allProducts.map((el) => {
@@ -139,37 +140,17 @@ export async function getStaticPaths() {
 }
 
 export async function getStaticProps({ params }) {
+	const client = Client();
+
+	// get all categories
 	const categories = await client.query({
-		query: gql`
-			query Categories {
-				allCategories {
-					id
-					name
-					slug
-				}
-			}
-		`,
+		query: allCategoriesQuery,
 	});
 
-	const PRODUCT_DATA = gql`
-		query ($slug: String!) {
-			productByName(slug: $slug) {
-				id
-				title
-				description
-				regularPrice
-				productImage {
-					id
-					image
-					altText
-				}
-			}
-		}
-	`;
-
+	// get product data by name
 	const { slug } = params;
 	const { data } = await client.query({
-		query: PRODUCT_DATA,
+		query: productByNameQuery,
 		variables: { slug },
 	});
 
