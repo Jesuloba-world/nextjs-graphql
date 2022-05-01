@@ -30,6 +30,9 @@ INSTALLED_APPS = [
     "mptt",
     "graphene_django",
     "corsheaders",
+    "graphql_auth",
+    "graphql_jwt.refresh_token.apps.RefreshTokenConfig",
+    "django_filters",
 ]
 
 MIDDLEWARE = [
@@ -126,7 +129,7 @@ GRAPHENE = {
 }
 
 AUTHENTICATION_BACKENDS = [
-    "graphql_jwt.backends.JSONWebTokenBackend",
+    "graphql_auth.backends.GraphQLAuthBackend",
     "django.contrib.auth.backends.ModelBackend",
 ]
 
@@ -141,3 +144,30 @@ CORS_EXPOSE_HEADERS = [
     "Content-Type",
     "X-CSRFToken",
 ]
+
+GRAPHQL_JWT = {
+    "JWT_VERIFY_EXPIRATION": True,
+    "JWT_LONG_RUNNING_REFRESH_TOKEN": True,
+    "JWT_ALLOW_ANY_CLASSES": [
+        "graphql_auth.mutations.Register",
+    ],
+}
+
+EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"
+
+AUTH_USER_MODEL = "account.CustomUser"
+
+# GRAPHQL_JWT = {
+#     #...
+
+#         "graphql_auth.mutations.VerifyAccount",
+#         "graphql_auth.mutations.ResendActivationEmail",
+#         "graphql_auth.mutations.SendPasswordResetEmail",
+#         "graphql_auth.mutations.PasswordReset",
+#         "graphql_auth.mutations.ObtainJSONWebToken",
+#         "graphql_auth.mutations.VerifyToken",
+#         "graphql_auth.mutations.RefreshToken",
+#         "graphql_auth.mutations.RevokeToken",
+#         "graphql_auth.mutations.VerifySecondaryEmail",
+#     ],
+# }
