@@ -1,5 +1,3 @@
-from dataclasses import field
-
 import graphene
 import graphql_jwt
 from django.contrib.auth.models import User
@@ -14,13 +12,16 @@ class UserType(DjangoObjectType):
 
 
 class Query(graphene.ObjectType):
-    users_detail = graphene.List(UserType)
+    user_detail = graphene.Field(UserType)
 
-    def resolve_users_detail(root, info):
+    def resolve_user_detail(root, info):
         user = info.context.user
+
+        print(user)
+
         if not user.is_authenticated:
             raise Exception("Authentication not provided")
-        return User.objects.all()
+        return User.objects.get(username=user)
 
 
 class Mutation(graphene.ObjectType):
